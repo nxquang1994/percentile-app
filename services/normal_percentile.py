@@ -5,6 +5,7 @@ from services.percentile import Percentile
 class NormalPercentile(Percentile):
     def __init__(self, percentile, values):
         super().__init__(percentile, values)
+        self.sorted_values = sorted(values)
 
     def get_quantile(self):
         if self.percentile < 25:
@@ -18,24 +19,15 @@ class NormalPercentile(Percentile):
         return False
 
     def get_pos(self):
-        pos = self.percentile * (len(self.values) + 1)
-        return math.floor(pos)
+        pos = math.ceil(self.percentile * len(self.values))
+        return pos
+
+    def get_value(self):
+        pos = self.get_pos()
+        return self.sorted_values[pos - 1]
 
     
     def get_total_count(self):
         return len(self.values)
 
 
-    def get_indexes(self):
-        len_values = len(self.values)
-        sorted_values = sorted(self.values)
-        if quantile == False:
-            return 'Percentile is invalid'
-        pos = self.get_pos()
-        value = self.values[pos - 1]
-        total_count = self.get_total_count()
-        dict_res = {
-            'value': value,
-            'total_count': total_count
-        }
-        return dict_res

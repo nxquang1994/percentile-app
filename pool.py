@@ -1,4 +1,4 @@
-from services.percentile import PercentileFactory
+from services.percentile_factory import PercentileFactory
 
 POOL_LIST = [
     {

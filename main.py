@@ -3,11 +3,11 @@ from flask import request, jsonify
 import json
 from pool import PoolHandler
 
+from services.constant import STRATEGY
+
 
 # Create application instance
 app = flask.Flask(__name__)
-
-STRATEGY = 'basic'
 
 
 def is_pool_exists(pool_id):
@@ -26,11 +26,11 @@ def post_pool():
         parsed_pool = json.loads(request.data)
         res = PoolHandler.upsert(parsed_pool)
         if res not in ['Appended', 'Inserted']:
-            return msg, 400
+            return res, 400
     except AssertionError as e:
         return e, 500
     else:
-        return msg
+        return res
 
 
 @app.route('/api/v1/pool_indexes', methods=['POST'])
@@ -46,11 +46,6 @@ def get_aspect_pool():
         return e, 500
     else:
         return jsonify(result)
-
-
-@app.route('/')
-def home():
-    return 'Hello World'
 
     
 
