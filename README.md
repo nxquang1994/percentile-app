@@ -101,5 +101,43 @@ Where:
 
 <em>N</em>: Number elements in the sample
 
+Reference: https://en.wikipedia.org/wiki/Percentile#The_nearest-rank_method
 ## How to extend with another advance percentile formula?
+### Reusable and scaleble
+To make the reusable, scaleable source code, I use the 2 patterns: template method and strategy.
 
+The class Percentile (in <em>percentile.py</em>) has responsible for handle percentile calculation. This is the abstract class has well-defined the calculation template. All of its concrete classes will implement detailed percentile calculation with their individual formulas.
+
+Class Percentile contains method <em>get_indexes()</em>. This method defines the general process to calculate percentile and return data.
+```Python
+def get_indexes(self): 
+	pos = self.get_pos()
+	value = self.get_value()
+	total_count = self.get_total_count()
+	dict_res = {
+		'value': value,
+		'total_count': total_count
+	}
+	return dict_res
+```
+
+The template method pattern is applied, all methods <em>get_pos(), get_value(), get_total_count()</em> are abstract methods without definition. 
+
+In my source code, I defined the class NormalPercentile (in <em>normal_percentile.py</em>) which is concreted class of Percentile.
+This class implements methods <em>get_pos(), get_value(), get_total_count()</em> in detail way.
+
+Once you wanna to create a new strategy to handle another percentile formulas. You can define a new concreted class of Percentile and implement the methods <em>get_pos(), get_value(), get_total_count()</em>. 
+
+### Avoid loose couple
+I create the class PercentileFactory (in <em>percentile_factory.py</em>) to produce the percentile handler. With each strategy calculated percentile we want to use, we pass the parameter <em>strategy</em> to the static method <em>create_strategy()</em>. Then it creates a new corresponding instance. We don't create instance directly in consumed class.
+
+When define any new strategy class, don't forget to add the corresponding strategy keyword to method <em>create_strategy()</em>. Therefore, the method has availability to create your new handler. Currently, it only has checker for the <em>NormalPercentile</em>.
+
+```python
+def create_strategy(percentile, values, strategy):
+	if strategy == 'basic':
+		return NormalPercentile(percentile, values)
+	return None
+```
+
+In the current code, the STRATEGY is configured in <em>constant.py</em>. If you want to change, let change to new strategy keyword you want.
