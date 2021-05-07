@@ -49,7 +49,6 @@ Or when posted pool is not existed, the response is:
 ```bash
 Inserted
 ```
-When posted pool is not exsited
 
 ### Second endpoint
 This endpoint will post an object to ask the P-th of a specific percetile in a given endpoint
@@ -82,7 +81,7 @@ In this application, I keep it sample and don't use any database connection to h
 The POOL_LIST is defined in the file <em>pool.py</em>
 
 ## Why Flask?
-Flask is the useful framework to build lightweight application with Python backend. Also, Flask can satisfy most of demand of the backend Python.
+[Flask](https://flask.palletsprojects.com/en/1.1.x/) is the useful framework to build lightweight application with Python backend. Also, Flask can satisfy most of demand of the backend Python.
 
 In this project, I focus on the feature calculating percentile. So use the simple framewrok to build endpoint is the best choice.
 
@@ -103,8 +102,8 @@ Where:
 
 Reference: https://en.wikipedia.org/wiki/Percentile#The_nearest-rank_method
 ## How to extend with another advance percentile formula?
-### Reusable and scaleble
-To make the reusable, scaleable source code, I use the 2 patterns: template method and strategy.
+### Reusable and scalable
+To make the reusable, scalable source code, I use the 2 patterns: template method and strategy.
 
 The class Percentile (in <em>percentile.py</em>) has responsible for handle percentile calculation. This is the abstract class has well-defined the calculation template. All of its concrete classes will implement detailed percentile calculation with their individual formulas.
 
@@ -129,7 +128,7 @@ This class implements methods <em>get_pos(), get_value(), get_total_count()</em>
 Once you wanna to create a new strategy to handle another percentile formulas. You can define a new concreted class of Percentile and implement the methods <em>get_pos(), get_value(), get_total_count()</em>. 
 
 ### Avoid loose couple
-I create the class PercentileFactory (in <em>percentile_factory.py</em>) to produce the percentile handler. With each strategy calculated percentile we want to use, we pass the parameter <em>strategy</em> to the static method <em>create_strategy()</em>. Then it creates a new corresponding instance. We don't create instance directly in consumed class.
+I create the class PercentileFactory (in <em>percentile_factory.py</em>) to produce the percentile handler. With each strategy calculating percentile we want to use, we pass the parameter <em>strategy</em> to the static method <em>create_strategy()</em>. Then it creates a new corresponding instance. We don't create instance directly in consumed class.
 
 When define any new strategy class, don't forget to add the corresponding strategy keyword to method <em>create_strategy()</em>. Therefore, the method has availability to create your new handler. Currently, it only has checker for the <em>NormalPercentile</em>.
 
