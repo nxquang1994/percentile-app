@@ -41,11 +41,11 @@ Request body example:
 }
 ```
 
-The response is the string:
+When posted pool is existed, the response is the string:
 ```bash
 Apppended
 ```
-When posted pool is existed, or
+Or when posted pool is not existed, the response is:
 ```bash
 Inserted
 ```
